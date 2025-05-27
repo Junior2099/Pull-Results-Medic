@@ -409,7 +409,7 @@
                     <i class="fas fa-hospital service-icon"></i> Clínica Scoppetta
                 </a>
             </div>
-            
+
             <div class="link-item" data-category="hospital" data-search="hsp hospital">
                 <a href="https://laboratorio.huhsp.org.br/arWebLaudo/login" target="_blank">
                     <i class="fas fa-procedures service-icon"></i> HSP
@@ -451,7 +451,7 @@
                     <i class="fas fa-vial service-icon"></i> Secondi
                 </a>
             </div>
-            
+
             <div class="link-item" data-category="laboratorio" data-search="notrelabs">
                 <a href="https://www.notrelabs.com.br/resultados-acesso" target="_blank">
                     <i class="fas fa-clipboard-check service-icon"></i> NotreLabs
@@ -492,6 +492,12 @@
                 <a href="https://sso.grupopardini.com.br/auth/realms/grupopardini/protocol/openid-connect/auth"
                     target="_blank">
                     <i class="fas fa-clinic-medical service-icon"></i> Grupo Pardini
+                </a>
+            </div>
+
+            <div class="link-item" data-category="laboratorio" data-search="CEDIG">
+                <a href="https://racimedcloud.com.br/ISAPI_APP/rExames.dll/?id=190" target="_blank">
+                    <i class="fas fa-clinic-medical service-icon"></i> CEDIG (CENTRO DIAGNÓSTICO)
                 </a>
             </div>
 
@@ -539,189 +545,189 @@
 
     <script>
 
-const searchInput = document.getElementById('search-input');
-const linkItems = document.querySelectorAll('.link-item');
-const noResults = document.querySelector('.no-results');
-const categoryBtns = document.querySelectorAll('.category-btn');
-const helpBtn = document.getElementById('help-btn');
-const helpModal = document.getElementById('help-modal');
-const closeModal = document.querySelector('.close-modal');
-const loadingElement = document.getElementById('loading');
+        const searchInput = document.getElementById('search-input');
+        const linkItems = document.querySelectorAll('.link-item');
+        const noResults = document.querySelector('.no-results');
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const helpBtn = document.getElementById('help-btn');
+        const helpModal = document.getElementById('help-modal');
+        const closeModal = document.querySelector('.close-modal');
+        const loadingElement = document.getElementById('loading');
 
 
-function initializeFavorites() {
-    
-    linkItems.forEach(item => {
-        const link = item.querySelector('a');
-        const favIcon = document.createElement('i');
-        favIcon.className = 'far fa-heart favorite-icon';
-        favIcon.style.marginRight = '10px';
-        favIcon.style.cursor = 'pointer';
-        link.prepend(favIcon);
+        function initializeFavorites() {
 
-     
-        const labName = link.textContent.trim().replace('❤️', '').trim();
-        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        if (favorites.includes(labName)) {
-            favIcon.classList.replace('far', 'fas');
-            favIcon.style.color = 'var(--primary-color)';
-        }
-    });
-
-   
-    document.querySelectorAll('.favorite-icon').forEach(icon => {
-        icon.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const isFavorite = this.classList.contains('fas');
-            const labName = this.parentElement.textContent.trim().replace('❤️', '').trim();
-            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-
-            if (isFavorite) {
-                this.classList.replace('fas', 'far');
-                this.style.color = '';
-                favorites = favorites.filter(name => name !== labName);
-            } else {
-                this.classList.replace('far', 'fas');
-                this.style.color = 'var(--primary-color)';
-                favorites.push(labName);
-            }
-
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-        });
-    });
-}
-
-
-function setupSearch() {
-    searchInput.addEventListener('input', function() {
-       
-        if (loadingElement) loadingElement.style.display = 'block';
-        
-      
-        setTimeout(() => {
-            const searchTerm = this.value.toLowerCase();
-            let hasResults = false;
-            
             linkItems.forEach(item => {
-                const searchData = item.getAttribute('data-search').toLowerCase();
-                const textContent = item.textContent.toLowerCase();
-                
-                if (searchData.includes(searchTerm) || textContent.includes(searchTerm)) {
-                    item.style.display = 'flex';
-                    hasResults = true;
-                } else {
-                    item.style.display = 'none';
+                const link = item.querySelector('a');
+                const favIcon = document.createElement('i');
+                favIcon.className = 'far fa-heart favorite-icon';
+                favIcon.style.marginRight = '10px';
+                favIcon.style.cursor = 'pointer';
+                link.prepend(favIcon);
+
+
+                const labName = link.textContent.trim().replace('❤️', '').trim();
+                const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+                if (favorites.includes(labName)) {
+                    favIcon.classList.replace('far', 'fas');
+                    favIcon.style.color = 'var(--primary-color)';
                 }
             });
-            
-            noResults.style.display = hasResults ? 'none' : 'block';
-            
-       
-            if (loadingElement) loadingElement.style.display = 'none';
-        }, 300);
-    });
-}
 
 
-function setupCategoryFilter() {
-    categoryBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-          
-            categoryBtns.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            
-            const category = this.getAttribute('data-category');
-            
-            linkItems.forEach(item => {
-                if (category === 'all') {
-                    item.style.display = 'flex';
-                } else {
-                    const itemCategory = item.getAttribute('data-category');
-                    item.style.display = itemCategory === category ? 'flex' : 'none';
-                }
+            document.querySelectorAll('.favorite-icon').forEach(icon => {
+                icon.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const isFavorite = this.classList.contains('fas');
+                    const labName = this.parentElement.textContent.trim().replace('❤️', '').trim();
+                    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+                    if (isFavorite) {
+                        this.classList.replace('fas', 'far');
+                        this.style.color = '';
+                        favorites = favorites.filter(name => name !== labName);
+                    } else {
+                        this.classList.replace('far', 'fas');
+                        this.style.color = 'var(--primary-color)';
+                        favorites.push(labName);
+                    }
+
+                    localStorage.setItem('favorites', JSON.stringify(favorites));
+                });
             });
-            
-    
-            searchInput.value = '';
-            noResults.style.display = 'none';
-        });
-    });
-}
-
-
-function setupHelpModal() {
-    if (helpBtn && helpModal) {
-        helpBtn.onclick = () => helpModal.style.display = "block";
-        closeModal.onclick = () => helpModal.style.display = "none";
-        window.onclick = (event) => {
-            if (event.target == helpModal) helpModal.style.display = "none";
         }
-    }
-}
 
 
-function setupCardClick() {
-    linkItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-         
-            if (e.target.classList.contains('favorite-icon')) return;
-            
-            if (!e.target.closest('a')) {
-                const link = this.querySelector('a');
-                if (link) {
-                    window.open(link.href, '_blank');
+        function setupSearch() {
+            searchInput.addEventListener('input', function () {
+
+                if (loadingElement) loadingElement.style.display = 'block';
+
+
+                setTimeout(() => {
+                    const searchTerm = this.value.toLowerCase();
+                    let hasResults = false;
+
+                    linkItems.forEach(item => {
+                        const searchData = item.getAttribute('data-search').toLowerCase();
+                        const textContent = item.textContent.toLowerCase();
+
+                        if (searchData.includes(searchTerm) || textContent.includes(searchTerm)) {
+                            item.style.display = 'flex';
+                            hasResults = true;
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+
+                    noResults.style.display = hasResults ? 'none' : 'block';
+
+
+                    if (loadingElement) loadingElement.style.display = 'none';
+                }, 300);
+            });
+        }
+
+
+        function setupCategoryFilter() {
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const category = this.getAttribute('data-category');
+
+                    linkItems.forEach(item => {
+                        if (category === 'all') {
+                            item.style.display = 'flex';
+                        } else {
+                            const itemCategory = item.getAttribute('data-category');
+                            item.style.display = itemCategory === category ? 'flex' : 'none';
+                        }
+                    });
+
+
+                    searchInput.value = '';
+                    noResults.style.display = 'none';
+                });
+            });
+        }
+
+
+        function setupHelpModal() {
+            if (helpBtn && helpModal) {
+                helpBtn.onclick = () => helpModal.style.display = "block";
+                closeModal.onclick = () => helpModal.style.display = "none";
+                window.onclick = (event) => {
+                    if (event.target == helpModal) helpModal.style.display = "none";
                 }
             }
+        }
+
+
+        function setupCardClick() {
+            linkItems.forEach(item => {
+                item.addEventListener('click', function (e) {
+
+                    if (e.target.classList.contains('favorite-icon')) return;
+
+                    if (!e.target.closest('a')) {
+                        const link = this.querySelector('a');
+                        if (link) {
+                            window.open(link.href, '_blank');
+                        }
+                    }
+                });
+
+
+                const icon = item.querySelector('.service-icon');
+                if (icon) {
+                    item.addEventListener('mouseenter', () => {
+                        icon.style.transform = 'scale(1.2)';
+                        icon.style.transition = 'transform 0.3s ease';
+                    });
+
+                    item.addEventListener('mouseleave', () => {
+                        icon.style.transform = 'scale(1)';
+                    });
+                }
+            });
+        }
+
+
+        function setupDarkMode() {
+            const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+            function handleDarkModeChange(e) {
+                if (e.matches) {
+                    document.body.classList.add('dark-mode');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                }
+            }
+
+
+            handleDarkModeChange(darkModeMediaQuery);
+
+
+            darkModeMediaQuery.addListener(handleDarkModeChange);
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeFavorites();
+            setupSearch();
+            setupCategoryFilter();
+            setupHelpModal();
+            setupCardClick();
+            setupDarkMode();
         });
 
-
-        const icon = item.querySelector('.service-icon');
-        if (icon) {
-            item.addEventListener('mouseenter', () => {
-                icon.style.transform = 'scale(1.2)';
-                icon.style.transition = 'transform 0.3s ease';
-            });
-            
-            item.addEventListener('mouseleave', () => {
-                icon.style.transform = 'scale(1)';
-            });
-        }
-    });
-}
-
-
-function setupDarkMode() {
-    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    
-    function handleDarkModeChange(e) {
-        if (e.matches) {
-            document.body.classList.add('dark-mode');
-        } else {
-            document.body.classList.remove('dark-mode');
-        }
-    }
-    
-
-    handleDarkModeChange(darkModeMediaQuery);
-    
-
-    darkModeMediaQuery.addListener(handleDarkModeChange);
-}
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    initializeFavorites();
-    setupSearch();
-    setupCategoryFilter();
-    setupHelpModal();
-    setupCardClick();
-    setupDarkMode();
-});
-
-const style = document.createElement('style');
-style.textContent = `
+        const style = document.createElement('style');
+        style.textContent = `
     .dark-mode {
         background: #121212;
         color: #f0f0f0;
@@ -737,7 +743,7 @@ style.textContent = `
         background: #0d1b2a;
     }
 `;
-document.head.appendChild(style);
+        document.head.appendChild(style);
     </script>
 </body>
 
